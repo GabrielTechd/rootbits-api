@@ -15,16 +15,30 @@ connectDB();
 
 const app = express();
 
-const corsOrigins = process.env.CORS_ORIGIN;
-const corsOptions = corsOrigins
-  ? {
-      origin: corsOrigins.split(',').map((o) => o.trim()).filter(Boolean),
-      credentials: true,
-      methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
-      allowedHeaders: ['Content-Type', 'Authorization']
-    }
-  : { origin: true };
-app.use(cors(corsOptions));
+const corsOrigins = process.env.CORS_ORIGIN
+  ? process.env.CORS_ORIGIN.split(',').map((o) => o.trim()).filter(Boolean)
+  : [];
+const allowAllOrigins = corsOrigins.length === 0;
+
+function corsMiddleware(req, res, next) {
+  const origin = req.headers.origin;
+  if (allowAllOrigins) {
+    res.setHeader('Access-Control-Allow-Origin', origin || '*');
+  } else if (origin && corsOrigins.includes(origin)) {
+    res.setHeader('Access-Control-Allow-Origin', origin);
+  } else if (corsOrigins.length > 0) {
+    res.setHeader('Access-Control-Allow-Origin', corsOrigins[0]);
+  }
+  res.setHeader('Access-Control-Allow-Credentials', 'true');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, PATCH, DELETE, OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+  if (req.method === 'OPTIONS') {
+    return res.status(204).end();
+  }
+  next();
+}
+app.use(corsMiddleware);
+app.use(cors(allowAllOrigins ? { origin: true } : { origin: corsOrigins, credentials: true }));
 
 app.use(express.json({ limit: '100mb' }));
 app.use(express.urlencoded({ extended: true, limit: '100mb' }));

@@ -58,9 +58,11 @@ Em **Project → Settings → Environment Variables** adicione:
 | `MONGODB_URI` | `mongodb+srv://...` | String de conexão do MongoDB (Atlas) |
 | `JWT_SECRET` | uma chave longa e aleatória | Ex.: gerar com `node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"` |
 | `JWT_EXPIRES_IN` | `7d` | Opcional |
-| `CORS_ORIGIN` | `https://painel.seudominio.com,https://seudominio.com` | URLs dos frontends, separadas por vírgula |
+| `CORS_ORIGIN` | `https://painel.seudominio.com,https://seudominio.com` | URLs dos frontends, separadas por vírgula (ex.: `https://rootbits-adm.vercel.app`) |
 
 Não é obrigatório definir `PORT` nem `VERCEL` (a Vercel define o que precisar).
+
+A API responde ao **preflight** (requisição `OPTIONS`) com 204 e envia os headers CORS em todas as respostas. Se o front receber erro de CORS, confira se `CORS_ORIGIN` na Vercel está exatamente igual à origem do front (sem barra no final; várias origens separadas por vírgula).
 
 ### 2.3 Deploy
 
