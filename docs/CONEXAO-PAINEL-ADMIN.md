@@ -48,10 +48,12 @@ Content-Type: application/json
     "nome": "Administrador",
     "email": "admin@rootbits.com.br",
     "role": "admin",
-    "ativo": true
+    "ativo": true,
+    "avatar": "data:image/jpeg;base64,..."
   }
 }
 ```
+O campo `avatar` vem como **data URL** quando o usuário tem foto; caso contrário pode vir `null`.
 
 ### 3.2 Guardar o token e usar nas requisições
 
@@ -75,7 +77,7 @@ fetch(`${API_BASE}/api/usuarios`, {
 
 ### 3.3 Dados do usuário logado
 
-**GET** `/api/auth/me` (com header `Authorization`) retorna o usuário atual. Use para exibir nome, role e para checagem de permissões no front.
+**GET** `/api/auth/me` (com header `Authorization`) retorna o usuário atual (nome, email, role, **avatar** em data URL, etc.). Use para exibir nome, foto de perfil e para checagem de permissões no front.
 
 ### 3.4 Tratamento de 401/403
 
@@ -91,7 +93,8 @@ Todas as rotas abaixo exigem **Authorization: Bearer &lt;token&gt;** (exceto log
 | Recurso      | Método | Rota | Uso no painel |
 |-------------|--------|------|----------------|
 | Login       | POST   | `/api/auth/login` | Tela de login |
-| Me          | GET    | `/api/auth/me` | Perfil / layout (nome, role) |
+| Me          | GET    | `/api/auth/me` | Perfil / layout (nome, role, avatar) |
+| Me          | PUT    | `/api/auth/me` | Atualizar próprio perfil (nome, avatar) |
 | Usuários    | GET    | `/api/usuarios` | Listar equipe (admin/ceo/…) |
 | Usuários    | POST   | `/api/usuarios` | Criar usuário (admin/ceo) |
 | Usuários    | GET    | `/api/usuarios/:id` | Editar usuário |
@@ -189,9 +192,67 @@ fetch(`${API_BASE}/posts`, {
 
 - **Criar/editar chamado**: **anexos** no body como array (até 5 itens). Cada item: data URL ou `{ data, contentType, filename }`.
 
-### Avatares de usuário
+### Imagem de perfil (avatar)
 
-- **PUT** `/api/usuarios/:id` com **application/json** e campo **avatar**: data URL ou `{ data, contentType }`.
+Cada usuário pode ter uma **foto de perfil**. O login e o **GET** `/api/auth/me` devolvem o campo `usuario.avatar` em **data URL** (ou `null` se não houver foto).
+
+**Como o usuário atualiza a própria foto:**
+
+- **PUT** `/api/auth/me` com **application/json** e corpo: `{ "nome": "Novo Nome", "avatar": "data:image/jpeg;base64,..." }`.
+  - Envie só os campos que quiser alterar (`nome` e/ou `avatar`).
+  - Para **remover** a foto: envie `"avatar": null` ou `"avatar": ""`.
+
+**No front (exemplo Next.js/React):**
+
+1. **Exibir a foto**  
+   Use `usuario.avatar` diretamente no `src` da imagem. Se for `null`, mostre um placeholder (iniciais, ícone, etc.):
+
+```jsx
+// Exemplo: cabeçalho ou menu do usuário
+const user = useUser(); // seu estado/context com dados do GET /api/auth/me
+
+{user?.avatar ? (
+  <img src={user.avatar} alt={user.nome} className="w-10 h-10 rounded-full object-cover" />
+) : (
+  <div className="w-10 h-10 rounded-full bg-gray-300 flex items-center justify-center text-sm font-medium">
+    {user?.nome?.slice(0, 2).toUpperCase()}
+  </div>
+)}
+```
+
+2. **Enviar nova foto (tela de perfil)**  
+   Converta o arquivo escolhido em data URL e chame **PUT** `/api/auth/me`:
+
+```js
+const fileToDataUrl = (file) =>
+  new Promise((res, rej) => {
+    const r = new FileReader();
+    r.onload = () => res(r.result);
+    r.onerror = rej;
+    r.readAsDataURL(file);
+  });
+
+// No submit do formulário de perfil (ex.: ao escolher uma imagem)
+const arquivo = e.target.files[0]; // input type="file" accept="image/*"
+if (!arquivo) return;
+const avatar = await fileToDataUrl(arquivo);
+
+const res = await fetch(`${API_BASE}/auth/me`, {
+  method: 'PUT',
+  headers: {
+    Authorization: `Bearer ${token}`,
+    'Content-Type': 'application/json',
+  },
+  body: JSON.stringify({ avatar }),
+});
+const usuarioAtualizado = await res.json();
+// Atualize o estado/context com usuarioAtualizado (já com avatar em data URL)
+```
+
+3. **Remover foto**  
+   `body: JSON.stringify({ avatar: null })` na mesma rota **PUT** `/api/auth/me`.
+
+**Admin/CEO:** continuam podendo alterar o avatar de qualquer usuário via **PUT** `/api/usuarios/:id` com campo **avatar** (data URL ou `{ data, contentType }`).
 
 ---
 
@@ -247,6 +308,7 @@ Cada contato tem: `nome`, `email`, `telefone`, `mensagem`, `lido`, `respondido`,
 - [ ] Envio do header `Authorization: Bearer <token>` em todas as requisições autenticadas.
 - [ ] Tratamento de 401 (logout) e 403 (sem permissão).
 - [ ] Uso de `usuario.role` para exibir/ocultar funcionalidades.
+- [ ] Exibir avatar do usuário no layout (usuario.avatar em `<img src>` ou placeholder com iniciais); atualizar perfil com PUT `/api/auth/me` (nome e/ou avatar em data URL).
 - [ ] Formulários de post com imagemPrincipal e imagensAdicionais em base64/data URL no JSON.
 - [ ] Formulários de chamado com cliente, responsável e anexos em base64 no body quando necessário.
 - [ ] Exibição de notificações e uso de `unread-count` e marcar como lida.
