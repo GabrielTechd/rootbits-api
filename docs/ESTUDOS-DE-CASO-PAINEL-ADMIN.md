@@ -32,6 +32,8 @@ O post de projeto segue a estrutura de **estudo de caso**:
 | `titulo`           | Sim         | Título principal (ex.: "E-commerce de moda") |
 | `subtitulo`        | Não         | Linha abaixo do título (ex.: "Marca de roupas") |
 | `descricao`        | Sim         | Texto da seção **Sobre o projeto** |
+| `tecnologiasUsadas` | Não         | Tecnologias usadas no projeto — array ou string separada por vírgula (ex.: "React, Next.js, MongoDB") |
+| `linkProjeto`      | Não         | URL do projeto em produção (ex.: "https://loja-exemplo.com.br") |
 | `imagemPrincipal`  | Sim         | Imagem em data URL ou base64 no JSON |
 | `imagensAdicionais`| Não         | Até 10 imagens (data URL ou base64) |
 | `tags`             | Não         | Array ou string separada por vírgula (ex.: "E-commerce, UX, SEO") |
@@ -55,6 +57,8 @@ O post de projeto segue a estrutura de **estudo de caso**:
   "titulo": "E-commerce de moda",
   "subtitulo": "Marca de roupas",
   "descricao": "Projeto de reformulação do e-commerce com foco em conversão e experiência mobile. O site anterior apresentava alto abandono no carrinho e baixa performance em dispositivos móveis. Desenvolvemos nova estrutura de páginas, fluxo de checkout simplificado e integração com meios de pagamento, além de otimização de imagens e performance.",
+  "tecnologiasUsadas": ["React", "Next.js", "Node.js", "MongoDB"],
+  "linkProjeto": "https://loja-exemplo.com.br",
   "imagemPrincipal": "data:image/jpeg;base64,/9j/4AAQ...",
   "imagensAdicionais": ["data:image/jpeg;base64,..."],
   "tags": ["E-commerce", "UX", "SEO"],
@@ -104,6 +108,8 @@ Organize a tela de criar/editar projeto em seções:
    - Título (`titulo`) *
    - Subtítulo (`subtitulo`)
    - Tags (`tags`) — input com chips ou texto "E-commerce, UX, SEO"
+   - Tecnologias usadas (`tecnologiasUsadas`) — array ou string separada por vírgula (ex.: "React, Next.js, MongoDB")
+   - Link do projeto (`linkProjeto`) — URL do site em produção
 
 2. **Desafio e resultado**
    - Desafio (`desafio`) — uma linha ou texto curto

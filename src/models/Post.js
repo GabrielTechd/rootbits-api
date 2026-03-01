@@ -9,6 +9,8 @@ const postSchema = new mongoose.Schema({
   titulo: { type: String, required: true, trim: true },
   subtitulo: { type: String, trim: true },
   descricao: { type: String, required: true },
+  tecnologiasUsadas: [{ type: String, trim: true }],
+  linkProjeto: { type: String, trim: true },
   imagemPrincipal: { type: imageSchema, required: true },
   imagensAdicionais: [imageSchema],
   autor: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },

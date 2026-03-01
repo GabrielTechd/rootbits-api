@@ -27,6 +27,8 @@ const API_BASE = process.env.NEXT_PUBLIC_API_BASE || 'https://rootbits-api.verce
       "titulo": "E-commerce de moda",
       "subtitulo": "Marca de roupas",
       "descricao": "Projeto de reformulação do e-commerce...",
+      "tecnologiasUsadas": ["React", "Next.js", "Node.js", "MongoDB"],
+      "linkProjeto": "https://loja-exemplo.com.br",
       "imagemPrincipal": "data:image/jpeg;base64,...",
       "imagensAdicionais": ["data:image/..."],
       "tags": ["E-commerce", "UX", "SEO"],
@@ -77,10 +79,12 @@ Seguindo o layout de referência:
 | Título principal     | `titulo`         | "E-commerce de moda" |
 | Subtítulo / tipo     | `subtitulo`      | "Marca de roupas" |
 | Tags (badges)        | `tags`           | "E-commerce", "UX", "SEO" |
+| **Tecnologias usadas**| `tecnologiasUsadas` | "React", "Next.js", "MongoDB" (badges) |
 | **Desafio**          | `desafio`        | "Aumentar conversão e experiência mobile." |
 | **Resultado**        | `resultado`      | "+40% em vendas online no primeiro trimestre." |
 | **Sobre o projeto**  | `descricao`      | Parágrafo longo |
 | **O que foi feito**  | `oQueFoiFeito`   | Lista com bullets |
+| **Link do projeto**  | `linkProjeto`    | URL para o site em produção (botão "Ver projeto") |
 | Imagem principal     | `imagemPrincipal`| `<img src={post.imagemPrincipal} />` |
 | Galeria              | `imagensAdicionais` | Um item por imagem |
 | Botão CTA            | `ctaTexto`       | "Quero um resultado como esse" |
@@ -96,6 +100,11 @@ Exemplo em React/Next (estrutura apenas):
   <div className="tags">
     {post.tags?.map((tag) => <span key={tag}>{tag}</span>)}
   </div>
+  {post.tecnologiasUsadas?.length > 0 && (
+    <div className="tecnologias">
+      {post.tecnologiasUsadas.map((tech) => <span key={tech}>{tech}</span>)}
+    </div>
+  )}
 
   {post.desafio && (
     <section>
@@ -135,6 +144,9 @@ Exemplo em React/Next (estrutura apenas):
     </div>
   )}
 
+  {post.linkProjeto && (
+    <a href={post.linkProjeto} target="_blank" rel="noopener noreferrer" className="link-projeto">Ver projeto</a>
+  )}
   <a href="/contato" className="cta">{post.ctaTexto || 'Quero um resultado como esse'}</a>
   <a href="/projetos">{post.ctaLinkTexto || 'Ver outros projetos'}</a>
 </article>

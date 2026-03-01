@@ -44,7 +44,7 @@ function parseStringArray(val) {
 exports.create = async (req, res) => {
   try {
     const {
-      titulo, subtitulo, descricao, publicado, ordem, tags, clienteRef,
+      titulo, subtitulo, descricao, tecnologiasUsadas, linkProjeto, publicado, ordem, tags, clienteRef,
       imagemPrincipal, imagensAdicionais, desafio, resultado, oQueFoiFeito, ctaTexto, ctaLinkTexto
     } = req.body;
     if (!titulo || !descricao) return res.status(400).json({ erro: 'Título e descrição obrigatórios' });
@@ -66,6 +66,8 @@ exports.create = async (req, res) => {
       publicado: publicado !== 'false' && publicado !== false,
       ordem: parseInt(ordem, 10) || 0,
       tags: Array.isArray(tags) ? tags : (tags ? String(tags).split(',').map(t => t.trim()) : []),
+      tecnologiasUsadas: parseStringArray(tecnologiasUsadas) || [],
+      linkProjeto: linkProjeto || undefined,
       clienteRef: clienteRef || undefined,
       desafio: desafio || undefined,
       resultado: resultado || undefined,
@@ -96,12 +98,14 @@ exports.update = async (req, res) => {
     const post = await Post.findById(req.params.id);
     if (!post) return res.status(404).json({ erro: 'Post não encontrado' });
     const {
-      titulo, subtitulo, descricao, publicado, ordem, tags, clienteRef,
+      titulo, subtitulo, descricao, tecnologiasUsadas, linkProjeto, publicado, ordem, tags, clienteRef,
       imagemPrincipal, imagensAdicionais, desafio, resultado, oQueFoiFeito, ctaTexto, ctaLinkTexto
     } = req.body;
     if (titulo !== undefined) post.titulo = titulo;
     if (subtitulo !== undefined) post.subtitulo = subtitulo || undefined;
     if (descricao !== undefined) post.descricao = descricao;
+    if (tecnologiasUsadas !== undefined) post.tecnologiasUsadas = parseStringArray(tecnologiasUsadas) ?? [];
+    if (linkProjeto !== undefined) post.linkProjeto = linkProjeto || undefined;
     if (publicado !== undefined) post.publicado = publicado === 'true' || publicado === true;
     if (ordem !== undefined) post.ordem = parseInt(ordem, 10);
     if (tags !== undefined) post.tags = Array.isArray(tags) ? tags : (typeof tags === 'string' ? tags.split(',').map(t => t.trim()) : post.tags);
