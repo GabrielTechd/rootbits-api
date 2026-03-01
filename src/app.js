@@ -16,7 +16,7 @@ connectDB();
 const app = express();
 
 const corsOrigins = process.env.CORS_ORIGIN
-  ? process.env.CORS_ORIGIN.split(',').map((o) => o.trim()).filter(Boolean)
+  ? process.env.CORS_ORIGIN.split(/[\s,]+/).map((o) => o.trim()).filter(Boolean)
   : [];
 const allowAllOrigins = corsOrigins.length === 0;
 
@@ -24,10 +24,12 @@ function corsMiddleware(req, res, next) {
   const origin = req.headers.origin;
   if (allowAllOrigins) {
     res.setHeader('Access-Control-Allow-Origin', origin || '*');
-  } else if (origin && corsOrigins.includes(origin)) {
+  } else if (origin && corsOrigins.some((allowed) => allowed === origin)) {
     res.setHeader('Access-Control-Allow-Origin', origin);
-  } else if (corsOrigins.length > 0) {
-    res.setHeader('Access-Control-Allow-Origin', corsOrigins[0]);
+  } else if (origin && corsOrigins.length > 0) {
+    const normalized = origin.replace(/\/$/, '');
+    const match = corsOrigins.find((allowed) => allowed.replace(/\/$/, '') === normalized);
+    if (match) res.setHeader('Access-Control-Allow-Origin', origin);
   }
   res.setHeader('Access-Control-Allow-Credentials', 'true');
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, PATCH, DELETE, OPTIONS');
