@@ -7,6 +7,7 @@ const imageSchema = new mongoose.Schema({
 
 const postSchema = new mongoose.Schema({
   titulo: { type: String, required: true, trim: true },
+  subtitulo: { type: String, trim: true },
   descricao: { type: String, required: true },
   imagemPrincipal: { type: imageSchema, required: true },
   imagensAdicionais: [imageSchema],
@@ -14,7 +15,13 @@ const postSchema = new mongoose.Schema({
   publicado: { type: Boolean, default: true },
   ordem: { type: Number, default: 0 },
   tags: [String],
-  clienteRef: { type: mongoose.Schema.Types.ObjectId, ref: 'Client' }
+  clienteRef: { type: mongoose.Schema.Types.ObjectId, ref: 'Client' },
+  // Estudo de caso
+  desafio: { type: String, trim: true },
+  resultado: { type: String, trim: true },
+  oQueFoiFeito: [{ type: String, trim: true }],
+  ctaTexto: { type: String, trim: true, default: 'Quero um resultado como esse' },
+  ctaLinkTexto: { type: String, trim: true, default: 'Ver outros projetos' }
 }, { timestamps: true });
 
 postSchema.index({ publicado: 1, ordem: -1 });

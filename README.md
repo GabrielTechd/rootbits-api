@@ -28,6 +28,8 @@ src/
 
 - **[docs/CONEXAO-PAINEL-ADMIN.md](docs/CONEXAO-PAINEL-ADMIN.md)** — Como criar e conectar o **painel administrativo** à API (login, token, CRUD, uploads, notificações, níveis de acesso).
 - **[docs/CONEXAO-SITE-CLIENTE.md](docs/CONEXAO-SITE-CLIENTE.md)** — Como criar e conectar o **site do cliente** à API (listagem e detalhe de projetos/portfólio, sem login).
+- **[docs/ESTUDOS-DE-CASO-SITE-CLIENTE.md](docs/ESTUDOS-DE-CASO-SITE-CLIENTE.md)** — Exibir estudos de caso (Desafio, Resultado, Sobre o projeto, O que foi feito) e formulário de contato no site do cliente.
+- **[docs/ESTUDOS-DE-CASO-PAINEL-ADMIN.md](docs/ESTUDOS-DE-CASO-PAINEL-ADMIN.md)** — Criar e editar estudos de caso no painel admin (campos e exemplos de payload).
 
 ## Endpoints principais
 
