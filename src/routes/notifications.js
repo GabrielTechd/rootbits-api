@@ -8,5 +8,6 @@ router.get('/', notificationController.list);
 router.get('/unread-count', notificationController.unreadCount);
 router.put('/:id/marcar-lida', notificationController.marcarLida);
 router.put('/marcar-todas-lidas', notificationController.marcarTodasLidas);
+router.delete('/:id', notificationController.remove);
 
 module.exports = router;

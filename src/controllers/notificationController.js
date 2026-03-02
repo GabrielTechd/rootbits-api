@@ -62,3 +62,13 @@ exports.unreadCount = async (req, res) => {
     res.status(500).json({ erro: e.message });
   }
 };
+
+exports.remove = async (req, res) => {
+  try {
+    const notif = await Notification.findByIdAndDelete(req.params.id);
+    if (!notif) return res.status(404).json({ erro: 'Notificação não encontrada' });
+    res.status(204).send();
+  } catch (e) {
+    res.status(500).json({ erro: e.message });
+  }
+};
