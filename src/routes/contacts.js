@@ -12,5 +12,6 @@ router.put('/marcar-todos-lidos', requireRole('admin', 'ceo', 'programador', 'de
 router.get('/:id', requireRole('admin', 'ceo', 'programador', 'designer', 'vendedor', 'suporte'), contactController.get);
 router.put('/:id/marcar-lido', requireRole('admin', 'ceo', 'programador', 'designer', 'vendedor', 'suporte'), contactController.marcarLido);
 router.put('/:id', requireRole('admin', 'ceo', 'programador', 'designer', 'vendedor', 'suporte'), contactController.update);
+router.delete('/:id', requireRole('admin', 'ceo', 'programador', 'designer', 'vendedor', 'suporte'), contactController.remove);
 
 module.exports = router;

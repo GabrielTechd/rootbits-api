@@ -99,3 +99,13 @@ exports.unreadCount = async (req, res) => {
     res.status(500).json({ erro: e.message });
   }
 };
+
+exports.remove = async (req, res) => {
+  try {
+    const contact = await Contact.findByIdAndDelete(req.params.id);
+    if (!contact) return res.status(404).json({ erro: 'Contato não encontrado' });
+    res.status(204).send();
+  } catch (e) {
+    res.status(500).json({ erro: e.message });
+  }
+};
