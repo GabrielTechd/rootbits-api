@@ -32,11 +32,11 @@ O post de projeto segue a estrutura de **estudo de caso**:
 | `titulo`           | Sim         | Título principal (ex.: "E-commerce de moda") |
 | `subtitulo`        | Não         | Linha abaixo do título (ex.: "Marca de roupas") |
 | `descricao`        | Sim         | Texto da seção **Sobre o projeto** |
-| `tecnologiasUsadas` | Não         | Tecnologias usadas no projeto — array ou string separada por vírgula (ex.: "React, Next.js, MongoDB") |
+| `tecnologiasUsadas` | Não         | Tecnologias usadas no projeto — array ou string: itens separados por **vírgula**, **;** ou **quebra de linha** (ex.: "React, Next.js, MongoDB"). Cada item é devolvido separado no array. |
 | `linkProjeto`      | Não         | URL do projeto em produção (ex.: "https://loja-exemplo.com.br") |
 | `imagemPrincipal`  | Sim         | Imagem em data URL ou base64 no JSON |
 | `imagensAdicionais`| Não         | Até 10 imagens (data URL ou base64) |
-| `tags`             | Não         | Array ou string separada por vírgula (ex.: "E-commerce, UX, SEO") |
+| `tags`             | Não         | Array ou string: itens separados por **vírgula**, **ponto e vírgula** ou **quebra de linha** (ex.: "E-commerce, UX, SEO"). Cada item é trimado e devolvido como array. |
 | `desafio`          | Não         | Texto do bloco **Desafio** |
 | `resultado`        | Não         | Texto do bloco **Resultado** |
 | `oQueFoiFeito`     | Não         | Lista de itens da seção **O que foi feito** (array de strings) |
@@ -107,8 +107,8 @@ Organize a tela de criar/editar projeto em seções:
 1. **Cabeçalho do caso**
    - Título (`titulo`) *
    - Subtítulo (`subtitulo`)
-   - Tags (`tags`) — input com chips ou texto "E-commerce, UX, SEO"
-   - Tecnologias usadas (`tecnologiasUsadas`) — array ou string separada por vírgula (ex.: "React, Next.js, MongoDB")
+   - Tags (`tags`) — um único campo de texto: digite os itens separados por vírgula (ex.: `E-commerce, UX, SEO`). A API divide por vírgula, ponto e vírgula ou enter e devolve array; no front, exiba cada item em um badge/chip separado.
+   - Tecnologias usadas (`tecnologiasUsadas`) — mesmo formato: texto com itens separados por vírgula (ex.: `React, Next.js, MongoDB`). A API devolve array; exiba cada tecnologia separada (badge/chip).
    - Link do projeto (`linkProjeto`) — URL do site em produção
 
 2. **Desafio e resultado**

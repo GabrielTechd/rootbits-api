@@ -34,10 +34,20 @@ exports.list = async (req, res) => {
   }
 };
 
+/**
+ * Converte string ou array em array de itens.
+ * String: separa por vírgula, ponto-e-vírgula ou quebra de linha; faz trim em cada item.
+ * Ex.: "React, Node.js, MongoDB" ou "React; Node.js" ou "React\nNode.js" → ["React", "Node.js", "MongoDB"]
+ */
 function parseStringArray(val) {
   if (val == null) return undefined;
   if (Array.isArray(val)) return val.map((s) => String(s).trim()).filter(Boolean);
-  if (typeof val === 'string') return val.split(',').map((s) => s.trim()).filter(Boolean);
+  if (typeof val === 'string') {
+    return val
+      .split(/[,;\n]+/)
+      .map((s) => s.trim())
+      .filter(Boolean);
+  }
   return undefined;
 }
 
@@ -65,7 +75,7 @@ exports.create = async (req, res) => {
       autor: req.user._id,
       publicado: publicado !== 'false' && publicado !== false,
       ordem: parseInt(ordem, 10) || 0,
-      tags: Array.isArray(tags) ? tags : (tags ? String(tags).split(',').map(t => t.trim()) : []),
+      tags: parseStringArray(tags) ?? [],
       tecnologiasUsadas: parseStringArray(tecnologiasUsadas) || [],
       linkProjeto: linkProjeto || undefined,
       clienteRef: clienteRef || undefined,
@@ -108,7 +118,7 @@ exports.update = async (req, res) => {
     if (linkProjeto !== undefined) post.linkProjeto = linkProjeto || undefined;
     if (publicado !== undefined) post.publicado = publicado === 'true' || publicado === true;
     if (ordem !== undefined) post.ordem = parseInt(ordem, 10);
-    if (tags !== undefined) post.tags = Array.isArray(tags) ? tags : (typeof tags === 'string' ? tags.split(',').map(t => t.trim()) : post.tags);
+    if (tags !== undefined) post.tags = parseStringArray(tags) ?? post.tags ?? [];
     if (clienteRef !== undefined) post.clienteRef = clienteRef || undefined;
     if (desafio !== undefined) post.desafio = desafio || undefined;
     if (resultado !== undefined) post.resultado = resultado || undefined;
